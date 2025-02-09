@@ -6,11 +6,16 @@ from .text_splitter import RecursiveCharacterTextSplitter
 # Assuming we're using OpenAI's API
 import openai
 
-def create_openai_client(api_key: str, base_url: Optional[str] = None) -> openai.OpenAI:
+def create_openai_client(api_key: str, base_url: Optional[str] = None, model: Optional[str] = None) -> openai.OpenAI:
     return openai.OpenAI(
         api_key=api_key,
-        base_url=base_url or "https://api.openai.com/v1"
+        base_url=base_url or "https://api.openai.com/v1",
+        model=model
     )
+
+# Get model from environment or use default
+DEFAULT_MODEL = "o3-mini"
+model = os.environ.get("OPENAI_MODEL", DEFAULT_MODEL)
 
 # Initialize OpenAI client with better error handling
 try:
@@ -20,7 +25,8 @@ try:
         
     openai_client = create_openai_client(
         api_key=api_key,
-        base_url=os.environ.get("OPENAI_API_ENDPOINT")
+        base_url=os.environ.get("OPENAI_API_ENDPOINT"),
+        model=model
     )
 except Exception as e:
     print(f"Error initializing OpenAI client: {e}")

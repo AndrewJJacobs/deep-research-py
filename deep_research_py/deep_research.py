@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import aiohttp
 import os
 from firecrawl import FirecrawlApp
-from .ai.providers import openai_client, trim_prompt
+from .ai.providers import openai_client, trim_prompt, model
 from .prompt import system_prompt
 import json
 
@@ -95,7 +95,7 @@ async def generate_serp_queries(
     response = await asyncio.get_event_loop().run_in_executor(
         None,
         lambda: openai_client.chat.completions.create(
-            model="o3-mini",
+            model=model,
             messages=[
                 {"role": "system", "content": system_prompt()},
                 {"role": "user", "content": prompt}
@@ -142,7 +142,7 @@ async def process_serp_result(
     response = await asyncio.get_event_loop().run_in_executor(
         None,
         lambda: openai_client.chat.completions.create(
-            model="o3-mini",
+            model=model,
             messages=[
                 {"role": "system", "content": system_prompt()},
                 {"role": "user", "content": prompt}
@@ -185,7 +185,7 @@ async def write_final_report(
     response = await asyncio.get_event_loop().run_in_executor(
         None,
         lambda: openai_client.chat.completions.create(
-            model="o3-mini",
+            model=model,
             messages=[
                 {"role": "system", "content": system_prompt()},
                 {"role": "user", "content": user_prompt}

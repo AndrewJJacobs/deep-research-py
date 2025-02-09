@@ -1,7 +1,7 @@
 from typing import List
 import asyncio
 import json
-from .ai.providers import openai_client
+from .ai.providers import openai_client, model
 from .prompt import system_prompt
 
 async def generate_feedback(query: str) -> List[str]:
@@ -11,7 +11,7 @@ async def generate_feedback(query: str) -> List[str]:
     response = await asyncio.get_event_loop().run_in_executor(
         None,
         lambda: openai_client.chat.completions.create(
-            model="o3-mini",
+            model=model,
             messages=[
                 {"role": "system", "content": system_prompt()},
                 {"role": "user", "content": f"Given this research topic: {query}, generate 3-5 follow-up questions to better understand the user's research needs. Return the response as a JSON object with a 'questions' array field."}
